@@ -1,0 +1,50 @@
+---
+title: "Introduction to R Markdown"
+subtitle: "CECL Workshop"  
+date: "March 29th, 2021"
+author: 
+  - "Nathan Vandeweerd"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE, fig.cap = TRUE)
+library(officedown); library(officer)
+library(ggplot2); library(tidyverse)
+library(here); library(flextable)
+library(kableExtra)
+def_text <- fp_text(font.size = 12, font.family = "Montserrat")
+
+```
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view"))
+```
+
+
+# The importance of reproducibility 
+
+---
+
+# What is R Markdown?
+
+---
+
+# Anatomy of an R Markdown file 
+
+
+---
+
+# Basic Markdown 
