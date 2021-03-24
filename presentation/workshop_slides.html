@@ -7,6 +7,12 @@
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view/tile-view.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"a8b37c114e24412cae5c3108303de53c","expires":14}</script>
+    <script src="libs/himalaya/himalaya.js"></script>
+    <script src="libs/js-cookie/js.cookie.js"></script>
+    <link href="libs/editable/editable.css" rel="stylesheet" />
+    <script src="libs/editable/editable.js"></script>
+    <link href="libs/tabwid/tabwid.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -27,20 +33,654 @@ class: center, middle, inverse, title-slide
 
 
 
-# The importance of reproducibility 
+
+
+
+# Workshop Materials
+
+&lt;br&gt; 
+
+.center[
+All workshop materials (including these slides) are available on GitHub:
+
+**https://github.com/nvandeweerd/intro_rmarkdown**
+]
+
+
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+&lt;img src="github.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+# Replication and Reproducibility
+
+&gt; "The replication of research results is a linchpin of the scientific process." (Nature, 2006)
+
+&lt;br&gt; 
+
+&gt; "To facilitate such replication, researchers would typicaly be expected to **report
+the methodology used in some detail**. What can at first appear to be a minor feature hidden away in the "limitations" section of a paper might -- after replicating the study a number of times and in a number of ways -- turn out to be a key factor impacting the outcomes obtained." (Porte, 2012 emphasis added)
+
+&lt;img src="replication.jpg" width="30%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Recommendations for replication studies in Applied Linguistics
+
+(Marsden, Morgan-Short, Thompson, and Abugaber, 2018)
+.small[
+- Increase the number of replication studies and  the rate at which they are performed and published. 
+- Make systematic inquiry into the causes of low rates of published replcation studies...
+- Use more self-labeling with the term replication wherever appropriate.
+- Apply a principled, standard nomenclature...
+- Reviewers of replications should also read the initial study that is being replicated. 
+- Provide warrants for replication studies...
+]
+
+- **Increase open availability of materials, including proficiency measures, for L2 research.**
+- **Make more research fully transparent and open for replication by making data available.**
+- **Encourage more journals to give more and stronger incentives to their authors for systematically making materials and data openly available.**
+
+.small[
+- Ensure that replication studies are conducted by researchers independently of the initial study's authors...
+- Increase multisite collaborative replication efforts. 
+- Encourage journal editorial borards to consider accepting Registered Reports... 
+- Encourage publishers to lift word limits or provide online capacity. 
+- When the initial study is cited, also cite replication studies.
+- Increase funding to promote replication.
+]
+
 
 ---
 
 # What is R Markdown?
 
+- Markdown (Gruber, 2004): mark-up language to convert plain text to HTML
+- The `knitr` package: a method for embedding R chunks into markdown documents
+- The `pandoc` package: enhances Markdown (adds support for tables, footnotes, math expressions etc.)
+
+&lt;br&gt; 
+
+- The `rmarkdown` package: combines all of the above into a single document format which can be *knit* into various output formats (pdf, HTML, Word, powerpoint etc.)
+
+&lt;img src="process.png" width="2344" /&gt;
+
 ---
 
-# Anatomy of an R Markdown file 
+# Various output files from one R Markdown file
+
+.pull-left[
+Word documents
+
+&lt;img src="manuscript.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+.pull-right[
+Presentations
+
+&lt;img src="overview_example.png" width="50%" /&gt;
+
+Posters
+
+&lt;img src="poster.png" width="40%" /&gt;
+]
+
+---
+
+# Transparent Analysis
+
+
+.pull-left[
+
+
+```r
+data &lt;- read.csv("../data/stay-abroad.csv") 
+data &lt;- data[data$ABROAD == "yes",]
+print(head(data))
+```
+
+```
+##    ID ABROAD BOOKCLUB   PLACEMENT LEX.SOPH ECON.VOCAB VOCAB.TEST
+## 2 102    yes       no     erasmus 2.487593   273.6371   85.98986
+## 3 103    yes       no    business 0.970495   215.1088   80.58794
+## 4 104    yes       no     erasmus 1.717259   324.6748   67.55379
+## 6 106    yes       no lang_assist 1.377997   303.7077   50.08712
+## 7 107    yes       no    business 1.443990   238.0487   59.67121
+## 9 109    yes       no lang_assist 1.066004   229.0751   74.10126
+```
+
+```r
+boxplot(LEX.SOPH ~ BOOKCLUB, data = data, notch = TRUE)
+```
+
+&lt;img src="workshop_slides_files/figure-html/unnamed-chunk-7-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+
+```r
+t.test(data$LEX.SOPH ~ data$BOOKCLUB)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  data$LEX.SOPH by data$BOOKCLUB
+## t = -12.578, df = 56.78, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.733163 -1.257069
+## sample estimates:
+##  mean in group no mean in group yes 
+##          2.075463          3.570579
+```
+
+]
+
+---
+
+# Getting started
+
+.pull-left[
+
+```r
+# Install most recent version
+install.packages("rmarkdown")
+
+# Latex engine for PDFs
+install.packages("tinytex")
+```
+In R Studio:
+
+**File &gt;&gt; New File &gt;&gt; R Markdown...**
+
+]
+
+.pull-right[
+&lt;img src="newfile.png" width="1405" /&gt;
+
+]
+
+---
+
+# Anatomy of an R Markdown file
+
+.pull-left[
+&lt;img src="hello-rmd.png" width="80%" /&gt;
+
+]
+
+.pull-right[
+
+&lt;img src="hello-rmd-out.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.center[**Did you spot the error?**]
+
+---
+
+# Accountability
+
+.pull-left[
+&lt;img src="hello-rmd_2.png" width="80%" /&gt;
+
+]
+
+.pull-right[
+
+&lt;img src="hello-rmd-out_2.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+# Anatomy of an R Markdown file
+
+.pull-left[
+&lt;img src="hello-rmd.png" width="80%" /&gt;
+
+]
+
+.pull-right[
+**YAML Header**
+
+- "YAML Ain't Markup Language"
+- Generated automatically when you use wizard
+- Contains: 
+  - file metadata
+  - output format 
+  - instructions for **knitting** the document 
+
+**Markdown formatted text**
+
+**Code chunks**
+
+- Three backticks followed by the language (R) in curly brackets
+
+
+**Inline code**
+
+- A single backtick followed by the language (without curly brackets) 
+
+
+]
+
+---
+
+# YAML Header
+
+- file metadata: 
+  - title, subtitle, author, date, abstract
+- output file: 
+  - "html\_document"  
+  - "pdf\_document" (requires Tex)  
+  - "word\_document"  
+- instructions for knitting: 
+  - styling information (page numbers, table of contents, font size)
+  - path to a template document (handy for working with Microsoft Word)
+  - path to a citation file (and citation format file)
 
 
 ---
 
-# Basic Markdown 
+# Markdown formatted text
+
+.small[.pull-left[
+- Section headers are marked with hashtags
+# \# Level 1
+### \## Level 2
+#### \## Level 3
+- Text surrounded by a single asterisks is *italic*
+- Text surrounded by two asterisks is **bold**
+- Single dash (-) renders as bullet points
+  - item
+  - item
+- Numbered lists
+  1. thing
+  2. thing
+- hyperlinks: [R Markdown Cheatsheet](https://www.rstudio.org/links/r_markdown_cheat_sheet)
+&gt; block quotes 
+]]
+
+.pull-right[
+
+```r
+- Section headers are marked with hashtags
+# Level 1
+## Level 2
+### Level 3
+- Text surrounded by a single asterisks is *italic*
+- Text surrounded by two asterisks **bold**
+- Single dash (-) renders as bullet points
+  - item
+  - item
+- Numbered lists
+  1. thing
+  2. thing
+- hyperlinks: [R Markdown Cheatsheet](https://www.rstudio.org/links/r_markdown_cheat_sheet)
+&gt;block quotes
+```
+
+
+]
+
+
+---
+
+# Code chunks
+
+- Need to specify the language (r)
+- Options can be specified after the language
+  - **echo**: should the code be printed? (default = TRUE)
+  - **eval:** should the code be run? (default = TRUE)
+
+
+
+````
+```{r, echo = TRUE, eval = TRUE}
+mean(data$LEX.SOPH)
+```
+````
+
+What will this produce in the output document?
+
+--
+
+
+```r
+mean(data$LEX.SOPH)
+```
+
+```
+## [1] 2.497163
+```
+
+--
+
+.pull-left[
+
+
+````
+```{r, echo = TRUE, eval = FALSE}
+mean(data$LEX.SOPH)
+```
+````
+]
+
+
+.pull-right[
+
+
+````
+```{r, echo = FALSE, eval = TRUE, comment = ':):)'}
+mean(data$LEX.SOPH)
+```
+````
+]
+
+--
+
+.pull-left[
+
+```r
+mean(data$LEX.SOPH)
+```
+
+]
+
+.pull-right[
+
+```
+:):) [1] 2.497163
+```
+
+]
+
+---
+
+
+# Inserting graphics
+
+
+````
+```{r}
+knitr::include_graphics('cecl.png')
+```
+````
+
+&lt;img src="cecl.png" width="50%" /&gt;
+
+---
+
+# Inserting graphics
+
+
+````
+```{r, out.width='10%', fig.cap = 'Figure 1. CECL logo', fig.align='center'}
+knitr::include_graphics('cecl.png')
+```
+````
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="cecl.png" alt="Figure 1. CECL logo" width="10%" /&gt;
+&lt;p class="caption"&gt;Figure 1. CECL logo&lt;/p&gt;
+&lt;/div&gt;
+
+Options:
+
+- out.width: changes the size of the image
+- fig.cap: adds a caption below the image
+- fig.align: alignment of the image
+
+---
+
+# A note about file management
+
+- By default the "working directory" of an R Markdown file is the folder where it is located
+- File paths (e.g. for images, data) must be specified *relative* to the working directory 
+- Easiest to include all necessary files in the same folder as the R Markdown folder
+- Also useful to work in "projects" (also see `here` package)
+
+**Note**: An R Markdown document also uses its own "environment" so packages need to be loaded using `library()` in a code chunk **or** explicitly called using double colons 
+
+
+```r
+knitr::include_graphics("folder_example.png")
+```
+
+&lt;img src="folder_example.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+# Tables
+
+How can we turn the raw data frame into a nicely formatted table?
+
+
+```r
+text.lengths &lt;- read.csv("../data/lsnp.info.csv")
+print(text.lengths)
+```
+
+```
+##             TASK min median    mean  max
+## 1     lgbt_essay 110  213.0  212.72  306
+## 2    drugs_essay 143  209.5  208.00  279
+## 3     food_essay 155  212.0  209.91  298
+## 4      cat_story 130  335.0  349.72  842
+## 5  sisters_story 211  402.5  410.27  916
+## 6 brothers_story 123  265.0  297.17  778
+## 7      interview 282 1021.0 1231.45 4158
+```
+
+---
+
+# Tables
+
+The `kable()` function from the **knitr** package can be used to convert raw data frames to markdown format
+
+
+
+````
+```{r}
+text.lengths &lt;- read.csv('../data/lsnp.info.csv')
+knitr::kable(text.lengths, booktabs = TRUE, caption = 'Text lengths by task')
+```
+````
+
+
+
+Table: Text lengths by task
+
+|TASK           | min| median|    mean|  max|
+|:--------------|---:|------:|-------:|----:|
+|lgbt_essay     | 110|  213.0|  212.72|  306|
+|drugs_essay    | 143|  209.5|  208.00|  279|
+|food_essay     | 155|  212.0|  209.91|  298|
+|cat_story      | 130|  335.0|  349.72|  842|
+|sisters_story  | 211|  402.5|  410.27|  916|
+|brothers_story | 123|  265.0|  297.17|  778|
+|interview      | 282| 1021.0| 1231.45| 4158|
+
+---
+
+# Tables
+
+For more flexibilty (and for non HTML documents), try the `flextable` package
+
+.pull-left[
+
+````
+```{r}
+library(flextable)
+library(magrittr)
+text.lengths &lt;- read.csv('../data/lsnp.info.csv')
+flextable(text.lengths) %&gt;%
+	bold(part = 'header') %&gt;%
+	bg(i = ~ TASK == 'interview', bg = 'wheat') %&gt;%
+	set_caption('Table 1. Text lengths by task')
+```
+````
+]
+
+
+.pull-right[
+
+&lt;template id="d7a647c9-fea2-43b4-9b9a-b39b273fc7d2"&gt;&lt;style&gt;
+.tabwid table{
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-spacing: 0;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-8244dece{border-collapse:collapse;}.cl-822a40dc{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-822a4190{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-822aacd4{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-822aad1a{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-822b93e2{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-822b9450{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-822b946e{width:54pt;background-clip: padding-box;background-color:rgba(245, 222, 179, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-822b9482{width:54pt;background-clip: padding-box;background-color:rgba(245, 222, 179, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-822b9496{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-822b94aa{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}caption {color: #777;margin-top: 10px;margin-bottom: 10px;text-align: center;}&lt;/style&gt;&lt;table class='cl-8244dece'&gt;&lt;caption class="Table Caption"&gt;Table 1. Text lengths by task&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b9496"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a40dc"&gt;TASK&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b94aa"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a40dc"&gt;min&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b94aa"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a40dc"&gt;median&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b94aa"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a40dc"&gt;mean&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b94aa"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a40dc"&gt;max&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b93e2"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a4190"&gt;lgbt_essay&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;110&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;213.0&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;212.7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;306&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b93e2"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a4190"&gt;drugs_essay&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;143&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;209.5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;208.0&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;279&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b93e2"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a4190"&gt;food_essay&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;155&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;212.0&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;209.9&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;298&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b93e2"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a4190"&gt;cat_story&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;130&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;335.0&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;349.7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;842&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b93e2"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a4190"&gt;sisters_story&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;211&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;402.5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;410.3&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;916&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b93e2"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a4190"&gt;brothers_story&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;123&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;265.0&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;297.2&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b9450"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;778&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-822b9482"&gt;&lt;p class="cl-822aacd4"&gt;&lt;span class="cl-822a4190"&gt;interview&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b946e"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;282&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b946e"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;1,021.0&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b946e"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;1,231.5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-822b946e"&gt;&lt;p class="cl-822aad1a"&gt;&lt;span class="cl-822a4190"&gt;4,158&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div id="7f027d39-773a-4751-8833-2085353c5118"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("7f027d39-773a-4751-8833-2085353c5118");
+var template = document.getElementById("d7a647c9-fea2-43b4-9b9a-b39b273fc7d2");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+]
+
+---
+
+# Citations
+
+In order to include citations, you first need to add two lines to the YAML header:
+
+- a path to a **.bib** file containing citations in Bibtex format (can be exported from Mendeley or Zotero)
+- a path to a **.csl** file containing citation formatting style guidelines (can be downloaded from the [Zotero Style Repository](https://www.zotero.org/styles?q=apa))
+- easiest if you store both of these in the same folder as the R Markdown file
+
+.pull-left[
+
+```r
+---
+title: "Introduction to R Markdown"
+author: "Nathan Vandeweerd"
+date: "`r Sys.Date()`"
+output: html_document
+*bibliography: citations.bib
+*csl: apa.csl
+---
+```
+]
+
+.pull-right[
+&lt;img src="export_bib.png" width="90%" /&gt;
+]
+
+
+---
+
+# Citations
+
+Once you have linked to a **.bib** file and a **.csl** file, you can include in-text citations using the format below:
+- Multiple citations can be separated with a semi-colon
+- A minus sign (-) means that only the year will be included 
+
+\[@CitationKey1; @CitationKey2\] --&gt; (Author, 2005; Author, 2006)  
+\[-@CitationKey1\] --&gt; (2005)
+
+.pull-left[
+
+The Citation Key is **generated automatically** by reference tools such as Mendeley and Zotero (though you may need to change the settings to make it visible).
+
+A bibliography will automatically be included at the end of the document which contains all of the cited references. To turn this off, simply add `suppress-bibliography: true` to the YAML header.
+
+]
+ 
+
+&lt;img src="citation_key.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Practice
+
+.small[
+1. Download the following files from GitHub (remember to save them all in the same folder): 
+- `example_document.Rmd`
+- `apa.csl`
+- `citations.bib`
+- `cecl.png`
+- `lsnp.info.csv`
+2. To do: 
+- make section headers: 
+  - abstract (first level)
+  - topics covered (second level)
+- make bullet points for the topics covered
+- add a code chunk that calculates 1+1 (show both the code and the result)
+- add inline code that calculates 1+1
+- add the CECL Logo (in a reasonable size)
+- add a table showing the lengths of the langsnap texts by task (`lsnp.info.csv`)
+- add a barplot (`barplot()`) of the same data
+- add a hyperlink to the R Markdown webpage
+- make the second paragraph a block quote
+- add the citations for the R Markdown package
+]
+
+
+# Useful packages
+
+Some other useful packages: 
+
+- `knitr` (included with rmarkdown package): working with code chunks, inserting graphics, rendering basic tables
+- `officer` and `officedown`: for working with Microsoft Office
+- `xaringen`: for HTML presentations (like this one)
+- `flextable`: more customizable tables
+- `bookdown`: for long documents (i.e. dissertations)
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
