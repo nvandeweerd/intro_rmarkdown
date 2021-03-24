@@ -12,5 +12,5 @@ Topics covered:
 - Inserting graphics and tables  
 - Adding a bibliography 
 
-Presentation slides can be found here: https://github.com/nvandeweerd/intro_rmarkdown/blob/main/presentation/workshop_slides.pdf
+Presentation slides can be found [here](https://github.com/nvandeweerd/intro_rmarkdown/blob/main/presentation/workshop_slides.pdf).
 
