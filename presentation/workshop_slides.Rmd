@@ -55,13 +55,13 @@ All workshop materials (including these slides) are available on GitHub:
 
 
 <br>
-<br>
-<br>
 
-```{r, out.width="40%", fig.align='center'}
-knitr::include_graphics("github.png")
+
+.center[
+```{r, out.width='25%' , fig.align='center'}
+knitr::include_graphics("qrcode.png")
 ```
-
+]
 
 
 ---
@@ -604,9 +604,12 @@ knitr::include_graphics("citation_key.png")
 
 ---
 
-# Useful packages
+# Want to learn more?
 
-Some other useful packages: 
+- [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+- [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+
+# Useful packages
 
 - `knitr` (included with rmarkdown package): working with code chunks, inserting graphics, rendering basic tables
 - `officer` and `officedown`: for working with Microsoft Office
